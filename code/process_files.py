@@ -38,3 +38,76 @@ Test it: pytest tests/test_streamlit.py -k process_files
 # README Step 7 names the two traps. The tests are built around them: choosing a
 # file without clicking must change nothing, and a rerun with the same file still
 # chosen must not count it again.
+
+
+import streamlit as st
+import json
+from packaging_parser import parse_packaging
+
+
+# Title
+st.title("Process Package Files")
+
+
+# Initialise session state only once
+if "files_processed" not in st.session_state:
+    st.session_state.files_processed = 0
+
+if "packages_processed" not in st.session_state:
+    st.session_state.packages_processed = 0
+
+if "summaries" not in st.session_state:
+    st.session_state.summaries = []
+
+
+# File uploader
+package_file = st.file_uploader(
+    "Upload package file:",
+    key="package_file"
+)
+
+
+# Process the file only when the button is clicked
+if st.button("Process file", key="process") and package_file:
+
+    # Bytes to text
+    text = package_file.getvalue().decode("utf-8")
+    lines = text.splitlines()
+
+    # Parse all non-blank lines
+    packages = []
+
+    for line in lines:
+        line = line.strip()
+
+        if not line:
+            continue
+
+        package = parse_packaging(line)
+        packages.append(package)
+
+    # Write the packages to JSON
+    json_name = package_file.name.replace(".txt", ".json")
+
+    with open(f"data/{json_name}", "w") as json_file:
+        json.dump(packages, json_file, indent=4)
+
+    # Update the running totals
+    st.session_state.files_processed += 1
+    st.session_state.packages_processed += len(packages)
+
+    # Keep a summary of this file
+    summary = f"{len(packages)} packages written to data/{json_name}"
+    st.session_state.summaries.append(summary)
+
+
+# Show the two metrics side by side
+col1, col2 = st.columns(2)
+
+col1.metric("Files processed", st.session_state.files_processed)
+col2.metric("Packages processed", st.session_state.packages_processed)
+
+
+# Show one summary line for every file processed
+for summary in st.session_state.summaries:
+    st.info(summary)
