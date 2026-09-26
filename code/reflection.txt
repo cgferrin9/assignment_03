@@ -4,3 +4,31 @@ See reflection.md for what makes a good reflection — be specific, use the
 terminology from this assignment (rerun, widget, return value, guard, bytes vs.
 text, decode, session state, initialise once, button-triggered, metric), and make
 it actionable.
+
+
+Assignment #3 helped me gain a better understanding of the information that 
+we have been learning in class specifically with streamlit and UI. One thing that I 
+learned on the more set up side was using the ports section. Origianlly
+when running and debugging my streamlit, it didn't open in another browser like it 
+had been in class. Therfore, I learned through the instructions thta I could go to the ports 
+section and open it manually from there. 
+
+On the more technical side, through this assignment
+I learned more about how Streamlit works. I learned that
+Streamlit reruns the code when a user interacts with a widget, 
+and that guards are important to make sure the code only runs when 
+there is actually something to process. I ran into this when my code
+tried to process a file before I had uploaded anything. I also learned
+that uploaded files come in as bytes, so they have to be decoded into
+text before they can be used.
+
+The part I struggled with the most was session state. At 
+first I was confused about why we needed it, but I then
+learned that normal variables reset when Streamlit reruns.
+Session state lets the program remember things, like 
+the number of files and packages processed. I still
+think I need more practice with session state because 
+I understand what it does, but I would probably struggle 
+to use it on my own without looking back at an example or being 
+guided by the intructions or help from the ChatBot provided by
+Leytisha.
